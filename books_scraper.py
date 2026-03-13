@@ -9,6 +9,8 @@ class BooksScraper:
     URL = "https://books.toscrape.com"
 
     BOOKS = (By.CSS_SELECTOR, ".product_pod")
+    CATEGORY_LINKS = (By.CSS_SELECTOR, ".nav-list li ul li a")
+
     TITLE = (By.CSS_SELECTOR, "h3 a")
     PRICE = (By.CSS_SELECTOR, ".price_color")
     STOCK = (By.CSS_SELECTOR, ".instock")
@@ -20,6 +22,23 @@ class BooksScraper:
 
     def load(self):
         self.driver.get(self.URL)
+
+    def get_categories(self):
+
+        categories = {}
+
+        elements = self.driver.find_elements(*self.CATEGORY_LINKS)
+
+        for el in elements:
+            name = el.text.strip()
+            link = el.get_attribute("href")
+
+            categories[name] = link
+
+        return categories
+
+    def open_category(self, url):
+        self.driver.get(url)
 
     def wait_books(self):
         self.wait.until(
