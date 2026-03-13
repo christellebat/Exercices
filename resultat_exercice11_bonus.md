@@ -1,3 +1,4 @@
+
 (.venv) PS C:\Users\chris\Desktop\Exercices> python main_books.py
 Chargement du site...
 
@@ -53,51 +54,37 @@ Catégories disponibles :
 49. Erotica
 50. Crime
 
-Choisir une catégorie (numéro): 2
+Choisir une catégorie (numéro): 3
 
-Catégorie choisie : Mystery
+Catégorie choisie : Historical Fiction
 
 20 livres trouvés dans cette catégorie
 
 5 premiers livres :
-Sharp Objects - £47.82 (Four)
-In a Dark, Dark Wood - £19.63 (One)
-The Past Never Ends - £56.5 (Four)
-A Murder in Time - £16.64 (One)
-The Murder of Roger Ackroyd (Hercule Poirot #4) - £44.1 (Four)
+Tipping the Velvet - £53.74 (One)
+Forever and Forever: The Courtship of Henry Longfellow and Fanny Appleton - £29.69 (Three)     
+A Flight of Arrows (The Pathfinders #2) - £55.53 (Five)
+The House by the Lake - £36.95 (One)
+Mrs. Houdini - £30.25 (Five)
 
 Statistiques :
 Nombre total : 20
-Prix moyen : 32.79
-Prix min : 10.69
-Prix max : 59.48
+Prix moyen : 35.38
+Prix min : 16.62
+Prix max : 55.55
 (.venv) PS C:\Users\chris\Desktop\Exercices>
 
 
 
-Statistiques :
-Nombre total : 20
-Prix moyen : 32.79
-Prix min : 10.69
-Prix max : 59.48
-(.venv) PS C:\Users\chris\Desktop\Exercices>
 
-Statistiques :
-Nombre total : 20
-Prix moyen : 32.79
-Prix min : 10.69
-Prix max : 59.48
-Statistiques :
-Nombre total : 20
-Prix moyen : 32.79
-Prix min : 10.69
-Statistiques :
-Nombre total : 20
-Statistiques :
-Statistiques :
-Nombre total : 20
-Prix moyen : 32.79
-Prix min : 10.69
-Prix max : 59.48
-(.venv) PS C:\Users\chris\Desktop\Exercices>
+
+
+
+
+
+
+
+
+
+
 
