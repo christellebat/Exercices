@@ -1,3 +1,6 @@
+import logging
+import os
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -6,15 +9,31 @@ from webdriver_manager.chrome import ChromeDriverManager
 from tests.test_tp1 import run_all_tests
 
 
+def setup_logger():
+    os.makedirs("logs", exist_ok=True)
+
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+
+    formatter = logging.Formatter(
+        "%(asctime)s | %(levelname)s | %(message)s"
+    )
+
+    file_handler = logging.FileHandler("logs/test.log")
+    file_handler.setFormatter(formatter)
+
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(formatter)
+
+    logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+
+
 def create_driver():
     options = Options()
     options.add_argument("--start-maximized")
     options.add_argument("--incognito")
-    options.add_argument("--disable-notifications")
-    options.add_argument("--disable-save-password-bubble")
-    options.add_argument("--disable-features=PasswordManagerOnboarding,PasswordCheck,SafeBrowsingEnhancedProtection")
 
-    # Désactive les infobars et popups liés au gestionnaire de mots de passe
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option("useAutomationExtension", False)
 
@@ -22,13 +41,9 @@ def create_driver():
         "credentials_enable_service": False,
         "profile.password_manager_enabled": False,
         "profile.password_manager_leak_detection": False,
-        "autofill.profile_enabled": False,
-        "autofill.credit_card_enabled": False,
     }
-    options.add_experimental_option("prefs", prefs)
 
-    # optionnel si tu veux lancer sans interface
-    # options.add_argument("--headless=new")
+    options.add_experimental_option("prefs", prefs)
 
     driver = webdriver.Chrome(
         service=Service(ChromeDriverManager().install()),
@@ -40,14 +55,22 @@ def create_driver():
 
 
 def main():
+    setup_logger()
+    logging.info("Démarrage des tests Selenium")
+
     driver = None
+
     try:
-        print("Démarrage du navigateur...")
+        logging.info("Lancement du navigateur")
         driver = create_driver()
+
         run_all_tests(driver)
+
+        logging.info("Tous les tests sont terminés")
+
     finally:
         if driver:
-            print("Fermeture du navigateur...")
+            logging.info("Fermeture du navigateur")
             driver.quit()
 
 
