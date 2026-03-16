@@ -1,67 +1,55 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
-from book_page import BooksPage
+from tests.test_tp1 import run_all_tests
 
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+def create_driver():
+    options = Options()
+    options.add_argument("--start-maximized")
+    options.add_argument("--incognito")
+    options.add_argument("--disable-notifications")
+    options.add_argument("--disable-save-password-bubble")
+    options.add_argument("--disable-features=PasswordManagerOnboarding,PasswordCheck,SafeBrowsingEnhancedProtection")
 
-print("============================================================")
-print("TP : EXTRACTION DE DONNÉES DE LIVRES")
-print("============================================================")
+    # Désactive les infobars et popups liés au gestionnaire de mots de passe
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option("useAutomationExtension", False)
 
-print("\n--- Phase 1: Navigation ---")
+    prefs = {
+        "credentials_enable_service": False,
+        "profile.password_manager_enabled": False,
+        "profile.password_manager_leak_detection": False,
+        "autofill.profile_enabled": False,
+        "autofill.credit_card_enabled": False,
+    }
+    options.add_experimental_option("prefs", prefs)
 
-page = BooksPage(driver)
+    # optionnel si tu veux lancer sans interface
+    # options.add_argument("--headless=new")
 
-page.load()
+    driver = webdriver.Chrome(
+        service=Service(ChromeDriverManager().install()),
+        options=options
+    )
 
-print("Accédé à books.toscrape.com")
+    driver.implicitly_wait(2)
+    return driver
 
-page.wait_books()
 
-print("Livres chargés")
+def main():
+    driver = None
+    try:
+        print("Démarrage du navigateur...")
+        driver = create_driver()
+        run_all_tests(driver)
+    finally:
+        if driver:
+            print("Fermeture du navigateur...")
+            driver.quit()
 
-print("\n--- Phase 2: Extraction des Données ---")
 
-books = page.extract_books()
-
-print(f"{len(books)} livres extraits avec succès")
-
-for i, book in enumerate(books):
-    print(f"Livre {i+1}: {book}")
-
-print("\n--- Phase 3: Rapport et Statistiques ---")
-
-print(f"\nNombre total de livres: {len(books)}")
-
-print("\n5 Premiers Livres:")
-
-for i in range(5):
-    b = books[i]
-
-    print(f"  {i+1}. {b.title}")
-    print(f"     Prix: £{b.price} | Rating: {b.rating} | {b.stock}")
-
-prices = [b.price for b in books]
-
-print("\nStatistiques de Prix:")
-
-print(f"  Prix moyen: £{round(sum(prices)/len(prices),2)}")
-print(f"  Prix minimum: £{min(prices)}")
-print(f"  Prix maximum: £{max(prices)}")
-
-ratings = {}
-
-for b in books:
-    ratings[b.rating] = ratings.get(b.rating, 0) + 1
-
-print("\nDistribution par Note:")
-
-for rating, count in ratings.items():
-    print(f"  {rating} étoiles: {count} livres")
-
-print("\nTP RÉUSSI!")
-
-driver.quit()
+if __name__ == "__main__":
+    main()
